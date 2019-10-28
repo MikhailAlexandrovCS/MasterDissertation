@@ -164,16 +164,21 @@ namespace RobotClient_Kuka_youBot_
             }
             try
             {
-                DatabaseInformationInputer dbOut = new DatabaseInformationInputer();
-                dbOut.info.Add(pathResultInformation);
-                dbOut.SaveChanges();
+                SavePathInfoInDatabase(pathResultInformation);
             }
             catch (Exception ex)
             {
                 WorkAtOverAgain(ref stackFirstManipulator, ref pathResultInformation);
-
+                SavePathInfoInDatabase(pathResultInformation);
             }
             MessageBox.Show($"Путь найден!\n{start.ToString()}\n{DateTimeOffset.Now.ToString()}\nВсего вершин: {_graphVertices.Count}", "Оповещение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void SavePathInfoInDatabase(PathResultInformation pathResultInformation)
+        {
+            DatabaseInformationInputer dbOut = new DatabaseInformationInputer();
+            dbOut.info.Add(pathResultInformation);
+            dbOut.SaveChanges();
         }
 
         private int GetSafeDistance(Size3D boxSize)
