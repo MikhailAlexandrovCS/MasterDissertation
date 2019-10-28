@@ -30,15 +30,15 @@ namespace RobotClient_Kuka_youBot_
 
         private void btnGetPath_Click(object sender, EventArgs e)
         {
-            //GetVertexes();
-            //coeff = 100;
+            GetVertexes();
+            coeff = 100;
             GetPath form = new GetPath(pointCloud, coeff);
             form.ShowDialog();
         }
 
         private void GetVertexes()
         {
-            StreamReader sr = new StreamReader(@"F:\ConvertedPointClouds\artificialPointCloud3130acd2-d992-4440-ab91-bab52cbb3d9b.txt");
+            StreamReader sr = new StreamReader(@"F:\ConvertedPointClouds\artificialPointCloud.txt");
             if (sr != null)
             {
                 string s = null;

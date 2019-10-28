@@ -57,7 +57,7 @@ namespace RobotClient_Kuka_youBot_
         private void glControl1_Paint(object sender, PaintEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.ClearColor(Color.Black);
+            GL.ClearColor(Color.White);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref _modelview);
             InitCamera();
@@ -186,7 +186,7 @@ namespace RobotClient_Kuka_youBot_
                 if (pointType.Equals(PointType.StartPoint))
                     GL.Color3(Color.Blue);
                 else
-                    GL.Color3(Color.Green);
+                    GL.Color3(Color.Orange);
                 for (ix = 0; ix <= nx; ++ix)
                 {
                     x = X + r * Math.Sin(iy * Math.PI / ny) * Math.Cos(2 * ix * Math.PI / nx);
@@ -210,7 +210,7 @@ namespace RobotClient_Kuka_youBot_
         public void DrawAxes()
         {
             GL.Begin(BeginMode.Lines);
-            GL.Color3(Color.Yellow);
+            GL.Color3(Color.Black);
             GL.Vertex3(0, 0, 0);
             GL.Vertex3(400, 0, 0);
             GL.Vertex3(0, 400, 0);
