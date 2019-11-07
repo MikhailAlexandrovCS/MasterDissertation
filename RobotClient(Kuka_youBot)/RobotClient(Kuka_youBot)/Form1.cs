@@ -30,8 +30,8 @@ namespace RobotClient_Kuka_youBot_
 
         private void btnGetPath_Click(object sender, EventArgs e)
         {
-            GetVertexes();
-            coeff = 100;
+            //GetVertexes();
+            //coeff = 100;
             GetPath form = new GetPath(pointCloud, coeff);
             form.ShowDialog();
         }

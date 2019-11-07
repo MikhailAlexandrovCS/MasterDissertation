@@ -43,7 +43,7 @@ namespace RobotClient_Kuka_youBot_
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     tbPCDfilePath.Text = openFileDialog1.FileName;
-                    rbLog.AppendText($"Загружен файл {openFileDialog1.FileName}");
+                    rbLog.AppendText($"Загружен файл {openFileDialog1.FileName}\n");
                     rbLog.ScrollToCaret();
                 }
                 btnConvertToCoordsPCDFileInformation.Enabled = true;
@@ -65,13 +65,13 @@ namespace RobotClient_Kuka_youBot_
             try
             {
                 string pcdFile = Encoding.UTF8.GetString(File.ReadAllBytes(tbPCDfilePath.Text));
-                rbLog.AppendText("Чтение .pcd файла");
+                rbLog.AppendText("Чтение .pcd файла\n");
                 rbLog.ScrollToCaret();
                 GetPCDfile(pcdFile);
-                rbLog.AppendText("Парсинг координат облака точек");
+                rbLog.AppendText("Парсинг координат облака точек\n");
                 rbLog.ScrollToCaret();
                 List<Point3D> coords = GetCoords(pcdFile, (int)numericUpDown1.Value, progressBar1);
-                rbLog.AppendText("Корректировка облака точек");
+                rbLog.AppendText("Корректировка облака точек\n");
                 rbLog.ScrollToCaret();
                 coords = ChangeCoords(coords);
                 SetPointsInFile(coords);
@@ -204,7 +204,7 @@ namespace RobotClient_Kuka_youBot_
                     z = Convert.ToDouble(lineArray[2], System.Globalization.CultureInfo.InvariantCulture) * coeff;
                     double ty = y * Math.Cos(1.570796) + z * Math.Sin(1.570796);
                     double tz = y * (-1) * Math.Sin(1.570796) + z * Math.Cos(1.570796);
-                    rbLog.AppendText($"{(index - 11)}. {x};{y};{z}");
+                    rbLog.AppendText($"{(index - 11)}. {x};{y};{z}\n");
                     rbLog.ScrollToCaret();
                     coords.Add(new Point3D(x, ty, tz));
                 }
