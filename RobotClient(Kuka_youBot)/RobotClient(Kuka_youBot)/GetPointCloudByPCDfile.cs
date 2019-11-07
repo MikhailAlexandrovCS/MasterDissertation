@@ -41,7 +41,11 @@ namespace RobotClient_Kuka_youBot_
                 openFileDialog1.Filter = "pcd files (*.pcd)|*.pcd|All files (*.*)|*.*";
                 openFileDialog1.RestoreDirectory = true;
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
                     tbPCDfilePath.Text = openFileDialog1.FileName;
+                    rbLog.AppendText($"Загружен файл {openFileDialog1.FileName}");
+                    rbLog.ScrollToCaret();
+                }
                 btnConvertToCoordsPCDFileInformation.Enabled = true;
                 numericUpDown1.Enabled = true;
                 label2.ForeColor = Color.Green;
@@ -61,8 +65,14 @@ namespace RobotClient_Kuka_youBot_
             try
             {
                 string pcdFile = Encoding.UTF8.GetString(File.ReadAllBytes(tbPCDfilePath.Text));
+                rbLog.AppendText("Чтение .pcd файла");
+                rbLog.ScrollToCaret();
                 GetPCDfile(pcdFile);
+                rbLog.AppendText("Парсинг координат облака точек");
+                rbLog.ScrollToCaret();
                 List<Point3D> coords = GetCoords(pcdFile, (int)numericUpDown1.Value, progressBar1);
+                rbLog.AppendText("Корректировка облака точек");
+                rbLog.ScrollToCaret();
                 coords = ChangeCoords(coords);
                 SetPointsInFile(coords);
                 File.Delete(@"F:\test.txt");
@@ -115,6 +125,49 @@ namespace RobotClient_Kuka_youBot_
             return tmp;
         }
 
+        private double GetMinZFromList(int startIndex, List<Point3D> vertices)
+        {
+            double minZList = vertices[startIndex].Z;
+            for (int i = startIndex; i < vertices.Count; i++)
+                if (minZList > vertices[i].Z)
+                    minZList = vertices[i].Z;
+            return minZList;
+        }
+
+        private void CorrectRangeValue(ref List<Point3D> tmpVertexes, double minZ, int startIndex)
+        {
+            for (int i = startIndex; i < tmpVertexes.Count; i++)
+                tmpVertexes[i] = new Point3D(tmpVertexes[i].X, tmpVertexes[i].Y, tmpVertexes[i].Z - minZ);
+        }
+
+        private void CorrectPointCloudInYAxes(List<Point3D> vertexes)
+        {
+            for (int i = 0; i < vertexes.Count; i++)
+                vertexes[i] = new Point3D(Math.Round(vertexes[i].X, 2), Math.Round(vertexes[i].Y, 2), Math.Round(vertexes[i].Z, 2));
+            List<Point3D> tmpVertexes = new List<Point3D>();
+            vertexes.Sort((a, b) => a.Y.CompareTo(b.Y));
+            double currY = vertexes[0].Y;
+            int startTmpIndex = 0;
+            while (true)
+            {
+                for (int j = 0; j < vertexes.Count; j++)
+                {
+                    if (vertexes[j].Y == currY)
+                        tmpVertexes.Add(vertexes[j]);
+                }
+                double minZFromLisst = GetMinZFromList(startTmpIndex, tmpVertexes);
+                CorrectRangeValue(ref tmpVertexes, minZFromLisst, startTmpIndex);
+                vertexes.RemoveAll(item => item.Y.Equals(currY));
+                startTmpIndex = tmpVertexes.Count;
+                if (vertexes.Count.Equals(0))
+                    break;
+                currY = vertexes[0].Y;
+            }
+            foreach (var item in tmpVertexes)
+                vertexes.Add(item);
+            vertexes.Sort((a, b) => a.Y.CompareTo(b.Y));
+        }
+
         private static List<Point3D> ChangeCoords(List<Point3D> coords)
         {
             double minX = GetMinCoordX(coords);
@@ -132,7 +185,7 @@ namespace RobotClient_Kuka_youBot_
             return coords;
         }
 
-        private static List<Point3D> GetCoords(string pcdFile, int coeff, ProgressBar progressBar)
+        private List<Point3D> GetCoords(string pcdFile, int coeff, ProgressBar progressBar)
         {
             double x = 0, y = 0, z = 0;
             List<Point3D> coords = new List<Point3D>();
@@ -151,6 +204,8 @@ namespace RobotClient_Kuka_youBot_
                     z = Convert.ToDouble(lineArray[2], System.Globalization.CultureInfo.InvariantCulture) * coeff;
                     double ty = y * Math.Cos(1.570796) + z * Math.Sin(1.570796);
                     double tz = y * (-1) * Math.Sin(1.570796) + z * Math.Cos(1.570796);
+                    rbLog.AppendText($"{(index - 11)}. {x};{y};{z}");
+                    rbLog.ScrollToCaret();
                     coords.Add(new Point3D(x, ty, tz));
                 }
                 catch (FormatException e)

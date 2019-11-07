@@ -42,6 +42,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.rbLog = new System.Windows.Forms.RichTextBox();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -169,11 +171,30 @@
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 11;
             // 
+            // rbLog
+            // 
+            this.rbLog.Location = new System.Drawing.Point(399, 26);
+            this.rbLog.Name = "rbLog";
+            this.rbLog.Size = new System.Drawing.Size(204, 157);
+            this.rbLog.TabIndex = 12;
+            this.rbLog.Text = "";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(396, 9);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(82, 13);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "Логгирование:";
+            // 
             // GetPointCloudByPCDfile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(386, 195);
+            this.ClientSize = new System.Drawing.Size(615, 195);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.rbLog);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -211,5 +232,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.RichTextBox rbLog;
+        private System.Windows.Forms.Label label7;
     }
 }
