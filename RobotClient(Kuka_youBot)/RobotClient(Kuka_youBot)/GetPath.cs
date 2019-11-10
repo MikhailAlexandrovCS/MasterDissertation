@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -368,6 +369,15 @@ namespace RobotClient_Kuka_youBot_
             graphVertices.RemoveAll(x => x.Check.Equals(false));
         }
 
+        private void SavePathToTextFile(string path, List<Point3D> pathVertexes)
+        {
+            using (StreamWriter streamWriter = new StreamWriter(path))
+            {
+                foreach (var vertex in pathVertexes)
+                    streamWriter.WriteLine($"{vertex.X};{vertex.Y};{vertex.Z}");
+            }
+        }
+
         private void GetFinalPathAndDraw(Stack<int> stack, Brush brush, List<GraphVertex> vertexes, Point3D startPoint, Point3D endPoint)
         {
             List<int> vertexesNumberPath = new List<int>();
@@ -394,6 +404,8 @@ namespace RobotClient_Kuka_youBot_
                 _firstManipulatorPath.Add(new Point3D(pathPoints[i].X, pathPoints[i].Y + (_boxSize.Y / 2), pathPoints[i].Z));
                 _secondManipulatorPath.Add(new Point3D(pathPoints[i].X, pathPoints[i].Y - (_boxSize.Y / 2), pathPoints[i].Z));
             }
+            SavePathToTextFile(@"F:\\pathPointsGraphFirstManipulator.txt", _firstManipulatorPath);
+            SavePathToTextFile(@"F:\\pathPointsGraphSecondManipulator.txt", _secondManipulatorPath);
         }
 
         private Stack<int> GetPathAfterDeikstra(List<GraphVertex> vertexes, int[,] matrix, int pEnd = 1)
