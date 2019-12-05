@@ -38,7 +38,7 @@ namespace RobotClient_Kuka_youBot_
 
         private void GetVertexes()
         {
-            StreamReader sr = new StreamReader(@"F:\ConvertedPointClouds\artificialPointCloud.txt");
+            StreamReader sr = new StreamReader(@"F:\ConvertedPointClouds\artificialPointCloud(1).txt");
             if (sr != null)
             {
                 string s = null;
